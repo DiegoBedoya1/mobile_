@@ -59,26 +59,24 @@ const CalendarTab = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
-              <IonIcon icon={chevronBack} />
+            <IonButton onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="text-white">
+              <IonIcon icon={chevronBack} className="text-white" />
             </IonButton>
           </IonButtons>
           <IonTitle className="ion-text-capitalize">
             {format(currentMonth, 'MMMM yyyy', { locale: es })}
           </IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
-              <IonIcon icon={chevronForward} />
+            <IonButton onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="text-white">
+              <IonIcon icon={chevronForward} className="text-white" />
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
 
       <IonContent className="ion-padding">
-        {/* Calendar Card */}
         <IonCard className="m-0 mb-4">
           <IonCardContent className="p-4">
-            {/* Week days header */}
             <div className="grid grid-cols-7 gap-2 mb-3">
               {weekDays.map((day, i) => (
                 <div key={i} className="text-center text-sm font-semibold text-muted-foreground">
@@ -87,7 +85,6 @@ const CalendarTab = () => {
               ))}
             </div>
 
-            {/* Calendar grid */}
             <div className="grid grid-cols-7 gap-2">
               {paddedDays.map((day, i) => {
                 if (!day) {
@@ -121,7 +118,6 @@ const CalendarTab = () => {
           </IonCardContent>
         </IonCard>
 
-        {/* Selected Day Section */}
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-display text-lg font-semibold text-foreground capitalize">
             {isSameDay(selectedDate, new Date()) ? 'Hoy' : format(selectedDate, 'EEEE d', { locale: es })}
@@ -131,86 +127,91 @@ const CalendarTab = () => {
           </IonText>
         </div>
 
-        {/* Tasks Section */}
-        <AnimatePresence mode="wait">
-          {dayTasks.length === 0 ? (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-            >
-              <IonCard className="m-0">
-                <IonCardContent className="text-center py-8">
-                  <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-muted flex items-center justify-center">
-                    <IonIcon icon={add} className="text-2xl text-muted-foreground" />
-                  </div>
-                  <p className="text-muted-foreground mb-3">No hay tareas para este día</p>
-                  <button 
-                    onClick={() => setIsModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-primary text-white font-semibold shadow-card hover:opacity-90 transition-opacity"
-                  >
-                    <IonIcon icon={add} className="text-lg" />
-                    Agregar tarea
-                  </button>
-                </IonCardContent>
-              </IonCard>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="tasks"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-2"
-            >
-              {dayTasks.map((task) => (
-                <motion.div
-                  key={task.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                >
-                  <IonCard className="m-0">
-                    <IonCardContent className="p-3 flex items-center gap-3">
-                      <IonCheckbox
-                        checked={task.completed}
-                        onIonChange={() => toggleTask(task.id)}
-                        className="task-checkbox"
-                      />
-                      <span className={`flex-1 ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                        {task.title}
-                      </span>
-                      <button
-                        onClick={() => deleteTask(task.id)}
-                        className="p-2 rounded-lg hover:bg-destructive/10 transition-colors"
-                      >
-                        <IonIcon icon={trashOutline} className="text-lg text-muted-foreground hover:text-destructive" />
-                      </button>
-                    </IonCardContent>
-                  </IonCard>
-                </motion.div>
-              ))}
-              
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="w-full mt-3 flex items-center justify-center gap-2 px-5 py-3 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary/10 transition-colors"
+         <div className="max-h-[calc(100vh-450px)] overflow-y-auto pb-20">
+          <AnimatePresence mode="wait">
+            {dayTasks.length === 0 ? (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
               >
-                <IonIcon icon={add} className="text-lg" />
-                Agregar otra tarea
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <IonCard className="m-0">
+                  <IonCardContent className="text-center py-8">
+                    <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-muted flex items-center justify-center">
+                      <IonIcon icon={add} className="text-2xl text-muted-foreground" />
+                    </div>
+                    <p className="text-muted-foreground mb-3">No hay tareas para este día</p>
+                    <button 
+                      onClick={() => setIsModalOpen(true)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-primary text-white font-semibold shadow-card hover:opacity-90 transition-opacity"
+                    >
+                      <IonIcon icon={add} className="text-lg" />
+                      Agregar tarea
+                    </button>
+                  </IonCardContent>
+                </IonCard>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="tasks"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-2"
+              >
+                {dayTasks.map((task) => (
+                  <motion.div
+                    key={task.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                  >
+                    <IonCard className="m-0">
+                      <IonCardContent className="p-3 flex items-center gap-3">
+                        <IonCheckbox
+                          checked={task.completed}
+                          onIonChange={() => toggleTask(task.id)}
+                          className="task-checkbox"
+                        />
+                        <span className={`flex-1 ${task.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                          {task.title}
+                        </span>
+                        <button
+                          onClick={() => deleteTask(task.id)}
+                          className="p-2 rounded-lg hover:bg-destructive/10 transition-colors"
+                        >
+                          <IonIcon icon={trashOutline} className="text-lg text-muted-foreground hover:text-destructive" />
+                        </button>
+                      </IonCardContent>
+                    </IonCard>
+                  </motion.div>
+                ))}
+                
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="w-full mt-3 flex items-center justify-center gap-2 px-5 py-3 rounded-xl border-2 border-primary text-primary font-semibold hover:bg-primary/10 transition-colors"
+                >
+                  <IonIcon icon={add} className="text-lg" />
+                  Agregar otra tarea
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-        {/* Add Task Modal */}
         <IonModal isOpen={isModalOpen} onDidDismiss={() => setIsModalOpen(false)} breakpoints={[0, 0.5]} initialBreakpoint={0.5}>
           <IonHeader>
             <IonToolbar>
               <IonTitle>Nueva tarea</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsModalOpen(false)}>Cerrar</IonButton>
+                 <IonButton
+                  onClick={() => setIsModalOpen(false)}
+                  style={{ '--color': 'hsl(var(--primary-foreground))' } as React.CSSProperties}
+                >
+                  Cerrar
+                </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
