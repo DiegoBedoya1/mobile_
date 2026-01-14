@@ -1,21 +1,14 @@
-import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonRouterOutlet,
-  setupIonicReact
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import Tasks from "./pages/Tasks";
-
-/* Core CSS required for Ionic components to work properly */
+import { useState } from 'react';
+import { IonApp, setupIonicReact } from '@ionic/react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import CalendarTab from './pages/CalendarTab';
+import ProgressTab from './pages/ProgressTab';
+import { BottomNav } from './components/BottomNav';
+import "./index.css";
 import '@ionic/react/css/core.css';
-
-/* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
 import '@ionic/react/css/typography.css';
-
-/* Optional CSS utils that can be commented out */
 import '@ionic/react/css/padding.css';
 import '@ionic/react/css/float-elements.css';
 import '@ionic/react/css/text-alignment.css';
@@ -23,41 +16,22 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+setupIonicReact({ mode: 'ios' });
 
-/* import '@ionic/react/css/palettes/dark.always.css'; */
-/* import '@ionic/react/css/palettes/dark.class.css'; */
-import '@ionic/react/css/palettes/dark.system.css';
+const queryClient = new QueryClient();
 
-/* Theme variables */
-import './theme/variables.css';
+const App: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'calendar' | 'progress'>('calendar');
 
-setupIonicReact();
-
-const App: React.FC = () => (
- <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-
-        {/* 1. AQUÍ LE PONES EL NOMBRE QUE QUIERAS A LA URL */}
-        <Route exact path="/tareas">
-          <Tasks />
-        </Route>
-
-        {/* 2. ESTO REDIRIGE AUTOMÁTICAMENTE */}
-        {/* Si entras a la raíz (/), te manda a /tareas */}
-        <Route exact path="/">
-          <Redirect to="/tareas" />
-        </Route>
-
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <IonApp>
+        {activeTab === 'calendar' ? <CalendarTab /> : <ProgressTab />}
+        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      </IonApp>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
+
